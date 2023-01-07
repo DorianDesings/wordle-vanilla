@@ -100,19 +100,18 @@ const checkErrors = msg => {
 startGame();
 
 const checkWin = word => {
+  checkRow(word);
+
   if (word === secretWord) {
     console.log('WIN');
     return true;
   }
 
-  checkRow(word);
   if (currentRow === NUMBER_OF_TRIES - 1) {
     checkErrors('No te quedan más intentos');
-    return false;
-  } else if (currentRow < NUMBER_OF_TRIES) {
     //MODAL HAS PERDIDO
-    return false;
   }
+  return false;
 };
 
 userWordForm.addEventListener('submit', e => {
