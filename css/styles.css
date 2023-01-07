@@ -69,6 +69,28 @@ body {
   outline: none;
 }
 
+.pop-up {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: max-content;
+  color: #111;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  background-color: #eee;
+  transform: translateX(-50%) translateY(-100%);
+  transition: transform 0.5s cubic-bezier(0.42, 0, 0.29, 2.25);
+}
+
+.pop-up--show {
+  transform: translateX(-50%) translateY(50px);
+}
+
+.pop-up p {
+  margin: 0;
+}
+
 .animated {
   animation: rotate 1s ease-in-out;
 }

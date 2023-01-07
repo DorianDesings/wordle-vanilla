@@ -1,9 +1,33 @@
-const ALL_WORDS = ['canal'];
+const ALL_WORDS = [
+  'alaba',
+  'bollo',
+  'canal',
+  'dados',
+  'estar',
+  'farol',
+  'gatos',
+  'index',
+  'jaula',
+  'labio',
+  'moral',
+  'nacer',
+  'oasis',
+  'piano',
+  'queja',
+  'rampa',
+  'salta',
+  'trama',
+  'uvula',
+  'valla',
+  'yermo',
+  'zorro'
+];
 
 const NUMBER_OF_TRIES = 5;
 
 const gameBoard = document.getElementById('game-board');
 const userWordForm = document.getElementById('user-word-form');
+const popUpElement = document.getElementById('pop-up');
 
 let currentRow = 0;
 let secretWord;
@@ -53,6 +77,7 @@ const checkRow = word => {
     paintRow(letter, i, className, delay * 100);
     delay++;
   }
+  currentRow++;
 };
 
 const startGame = () => {
@@ -60,16 +85,44 @@ const startGame = () => {
   gameBoard.append(createRow());
 };
 
+const checkErrors = msg => {
+  popUpElement.innerHTML = '';
+  const newText = document.createElement('p');
+  newText.textContent = msg;
+  popUpElement.append(newText);
+  popUpElement.classList.add('pop-up--show');
+  const timeoutId = setTimeout(() => {
+    popUpElement.classList.remove('pop-up--show');
+    clearTimeout(timeoutId);
+  }, 2000);
+};
+
 startGame();
+
+const checkWin = word => {
+  if (word === secretWord) {
+    console.log('WIN');
+    return true;
+  }
+
+  checkRow(word);
+  if (currentRow === NUMBER_OF_TRIES - 1) {
+    checkErrors('No te quedan más intentos');
+    return false;
+  } else if (currentRow < NUMBER_OF_TRIES) {
+    //MODAL HAS PERDIDO
+    return false;
+  }
+};
 
 userWordForm.addEventListener('submit', e => {
   e.preventDefault();
-  console.dir(e.target);
-  if (e.target.word.value.length !== 5) return;
+  if (e.target.word.value.length !== 5) {
+    checkErrors('La palabra debe tener 5 letras');
+    return;
+  }
 
-  if (currentRow < NUMBER_OF_TRIES) {
-    checkRow(e.target.word.value);
-    currentRow++;
+  if (!checkWin(e.target.word.value)) {
     e.target.reset();
   }
 });
