@@ -65,23 +65,35 @@ const checkRow = word => {
   let className;
   for (let i = 0; i < word.length; i++) {
     const letter = word[i];
-    if (letter === secretWord[i]) {
-      wordToCheck = wordToCheck.replace(letter, '');
+    if (letter === wordToCheck[i]) {
       className = 'letter--correct';
-    } else if (secretWord.includes(letter) && wordToCheck.includes(letter)) {
-      wordToCheck = wordToCheck.replace(letter, '');
+      wordToCheck = wordToCheck.replace(letter, '-');
+      paintRow(letter, i, className, delay * 100);
+    }
+  }
+
+  for (let i = 0; i < wordToCheck.length; i++) {
+    const letter = word[i];
+    if (wordToCheck.includes(letter)) {
       className = 'letter--present';
+      wordToCheck = wordToCheck.replace(letter, '-');
+      paintRow(letter, i, className, delay * 100);
     } else {
       className = 'letter--incorrect';
+      paintRow(letter, i, className, delay * 100);
     }
-    paintRow(letter, i, className, delay * 100);
-    delay++;
   }
+
+  console.log(wordToCheck);
+
+  delay++;
+
   currentRow++;
 };
 
 const startGame = () => {
   secretWord = chooseSecretWord();
+  console.log(secretWord);
   gameBoard.append(createRow());
 };
 
@@ -101,13 +113,14 @@ startGame();
 
 const checkWin = word => {
   checkRow(word);
+  console.log(word);
 
   if (word === secretWord) {
     console.log('WIN');
     return true;
   }
 
-  if (currentRow === NUMBER_OF_TRIES - 1) {
+  if (currentRow === NUMBER_OF_TRIES) {
     checkErrors('No te quedan más intentos');
     //MODAL HAS PERDIDO
   }
